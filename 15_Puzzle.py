@@ -5,6 +5,9 @@ Created on Thu Jul  2 22:03:35 2020
 @author: garvi
 """
 
+import search_utility
+
+
 class PuzzleState():
     
     def __init__(self, numberArray):
@@ -72,10 +75,10 @@ class PuzzleState():
         print (self.blank)
         
 
-class SearchStuff(puzzleToSearch):
+class SearchStuff(PuzzleState):
     
     def __init__(self):
-        self.puzzle = puzzleToSearch
+        self.puzzle = self.Cells
         self.expandedNodes = 0 #Just for curiousty
         
     def startingState(self):
@@ -99,4 +102,8 @@ class SearchStuff(puzzleToSearch):
 if __name__ == '__main__':
     
     numberArray = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    puzzle = PuzzleState(numberArray)
+    puzzleProblem = PuzzleState(numberArray)
+    search = SearchStuff(puzzleProblem)
+    paths = search_utility.bfs(search)
+    
+    

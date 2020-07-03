@@ -8,11 +8,12 @@ Utility file for various search algorithms
 
 """
 
-
+import containers_utility as C
+import time
 
 def breadthFirstSearch(problem):
     
-    s = Queue()
+    s = C.Queue()
     
     start = (problem.getStartState(), [])
     
@@ -28,7 +29,7 @@ def breadthFirstSearch(problem):
         
         if firstNode[0] not in exploredFrontiers:
             exploredFrontiers.add(firstNode[0])
-            potentialWinners = problem.getSuccessors(firstNode[0])
+            potentialWinners = problem.getSubLists(firstNode[0])
 
             for i in range(len(potentialWinners)):
                 Nodes = potentialWinners[i][0]
@@ -47,7 +48,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     start1 = time.time()
     #print (start)
     
-    s = util.PriorityQueue()
+    s = C.PriorityQueue()
     
     start = (problem.getStartState(), [])
     
@@ -75,7 +76,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 s.push((Nodes, Actions), problem.getCostOfActions(Actions) + heuristic(Nodes, problem))
 
 
-# Abbreviations
 bfs = breadthFirstSearch
 astar = aStarSearch
 
