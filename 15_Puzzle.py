@@ -44,27 +44,57 @@ class PuzzleState():
                 
                 for a point, say (2,2) all actions are legal.
                 for a point, say (3,3), down and right are illegal.
+                                 (0,1) up is illegal
         '''
         actions = []
         for row, cols in Cells:
             if row != 0:
-                actions.append('down')
-            if row != 3:
                 actions.append('up')
+            if row != 3:
+                actions.append('down')
             
             if cols != 0:
-                actions.append('right')
-            if cols != 3:
                 actions.append('left')
-                
+            if cols != 3:
+                actions.append('right')
         return actions
         
+    
+    def isGoalState(self, puzzle):
+        for rows in range(4):
+            for cols in range(4):
+                if puzzle[rows][cols] != rows + cols:
+                    return False
+        return True
     
     def debugPrinter(self):
         print (self.Cells)
         print (self.blank)
         
+
+class SearchStuff(puzzleToSearch):
+    
+    def __init__(self):
+        self.puzzle = puzzleToSearch
+        self.expandedNodes = 0 #Just for curiousty
         
+    def startingState(self):
+        return self.puzzle
+    
+    def getSubLists(self, puzzle):
+        
+        subLists = []
+        actions = puzzle.potentialActions(puzzle)
+        for action in actions:
+            subLists.append((puzzle, action, 1))
+            self.expanded += 1
+        print("\n Nodes expanded: ".format(self.expanded))
+        return subLists
+    
+    def isGoal(self, puzzle):
+        return puzzle.isGoalState
+    
+    
 
 if __name__ == '__main__':
     
