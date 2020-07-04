@@ -89,7 +89,7 @@ def aStarSearch(problem):
                 Actions = list(firstNode[1])
                 Actions.append(potentialWinners[i][1])
                 #print(Nodes)
-                s.push((Nodes, Actions), problem.getCostOfActions(Actions) + h1(Nodes, problem) + h2(Nodes,problem))
+                s.push((Nodes, Actions), problem.getCostOfActions(Actions) + h2(Nodes, problem) + h1(Nodes,problem))
 
 
 bfs = breadthFirstSearch

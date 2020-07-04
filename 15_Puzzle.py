@@ -182,11 +182,15 @@ def progressbar(progressVal, prefix=" ", size=60, file=sys.stdout):
 
 if __name__ == '__main__':
     
+    start = time.time()
+    print ('\n\nKeep in mind 15 puzzle is NP hard')
+    print ('A* is heavy on memory as well.')
+    
     numberArray = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     numberArray2 = [4,5,6,1,2,3,7,8,9,10,11,12,13,14,15,0]
     puzzle = [1,2,3,6,5,4,7,8,9,10,11,12,13,14,15,0]
 
-    puzzleProblem = PuzzleState(puzzle)
+    puzzleProblem = PuzzleState(numberArray2)
     print ('\n\nInitial Puzzle\n', puzzleProblem.printar())
     # The puzzle object interactes with the BFS algorithm with the class above.
     search = SearchStuff(puzzleProblem)
@@ -198,3 +202,5 @@ if __name__ == '__main__':
     print('\nNodes Expanded:', search.expanded)
     print('\n\nSolution:')
     print (puzzle.printar())
+    
+    print ('\nTime Taken in seconds:', time.time() - start)
