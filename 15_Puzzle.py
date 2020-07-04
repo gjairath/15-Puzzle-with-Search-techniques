@@ -6,14 +6,15 @@ Created on Thu Jul  2 22:03:35 2020
 """
 
 import search_utility
-
+import sys
+import time 
 
 class PuzzleState():
     
     def __init__(self, numberArray):
         self.Array = numberArray
         self.blank, self.Cells = self.buildCells(self.Array)
-        self.debugPrinter()
+       # self.debugPrinter()
         
     def buildCells(self, Array):
         # The matrix is 4x4
@@ -155,18 +156,45 @@ class SearchStuff:
     def isGoalState(self, puzzle):
         return puzzle.isGoalState(puzzle)
     
+    def getCostOfActions(self, actions):
+        """
+         actions: A list of actions to take
+
+        This method returns the total cost of a particular sequence of actions.  The sequence must
+        be composed of legal moves
+        """
+        return len(actions)
+
+def progressbar(progressVal, prefix=" ", size=60, file=sys.stdout):
     
+    count = len(progressVal) #number queens
+    def show(j):
+        x = int(size * j / count) 
+        file.write("%s%s%s %i/%i\r" % (prefix, "."*x, "."*(size-x), j, count))
+        file.flush()        
+    show(0)
+    for i, item in enumerate(progressVal):
+        yield item
+        show(i+1)
+        
+    file.write("\n")
+    file.flush()
 
 if __name__ == '__main__':
     
     numberArray = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    puzzleProblem = PuzzleState(numberArray)
-    print (puzzleProblem.printar())
+    numberArray2 = [4,5,6,1,2,3,7,8,9,10,11,12,13,14,15,0]
+    puzzle = [1,2,3,6,5,4,7,8,9,10,11,12,13,14,15,0]
+
+    puzzleProblem = PuzzleState(puzzle)
+    print ('\n\nInitial Puzzle\n', puzzleProblem.printar())
     # The puzzle object interactes with the BFS algorithm with the class above.
     search = SearchStuff(puzzleProblem)
     
     # The search object is what we actually do the BFS on.
-    puzzle, paths = search_utility.bfs(search)
-    print('Nodes Expanded:', search.expanded)
- 
+    for i in progressbar(range(10), "Finding: ", 40): 
+        time.sleep(0.1)
+        puzzle, paths = search_utility.astar(search)
+    print('\nNodes Expanded:', search.expanded)
+    print('\n\nSolution:')
     print (puzzle.printar())

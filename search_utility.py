@@ -38,15 +38,30 @@ def breadthFirstSearch(problem):
                 s.push((Nodes, Actions))
                 
     return 'Failure'
-    
 
-def nullHeuristic(state, problem=None):
+def h1(state, problem=None):
  
-    return 0
+    distance = 0
+    for i in range(4):
+        for j in range(4):
+            if state.Cells[i][j] == 0: continue
+            distance += abs(i - (state.Cells[i][j]/4)) + abs(j -  (state.Cells[i][j]%4));
+    return distance
 
-def aStarSearch(problem, heuristic=nullHeuristic):
+def h2(state, problem=None):
 
-    start1 = time.time()
+    misplaced = 0
+    compare = 0
+    for i in range(4):
+        for j in range(4):
+            if state.Cells[i][j] != compare:
+                misplaced += 1
+            compare += 1
+    return misplaced
+
+def aStarSearch(problem):
+
+    #start1 = time.time()
     #print (start)
     
     s = C.PriorityQueue()
@@ -61,20 +76,20 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         firstNode = s.pop()
         
         if (problem.isGoalState(firstNode[0])):
-            something = time.time() - start1
-            print (something)
-            return firstNode[1]
+            #something = time.time() - start1
+            #print (something)
+            return firstNode[0], firstNode[1]
         
         if firstNode[0] not in exploredFrontiers:
             exploredFrontiers.add(firstNode[0])
-            potentialWinners = problem.getSuccessors(firstNode[0])
+            potentialWinners = problem.getSubLists(firstNode[0])
 
             for i in range(len(potentialWinners)):
                 Nodes = potentialWinners[i][0]
                 Actions = list(firstNode[1])
                 Actions.append(potentialWinners[i][1])
                 #print(Nodes)
-                s.push((Nodes, Actions), problem.getCostOfActions(Actions) + heuristic(Nodes, problem))
+                s.push((Nodes, Actions), problem.getCostOfActions(Actions) + h1(Nodes, problem) + h2(Nodes,problem))
 
 
 bfs = breadthFirstSearch
