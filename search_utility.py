@@ -16,15 +16,15 @@ def breadthFirstSearch(problem):
     s = C.Queue()
     
     start = (problem.getStartState(), [])
-    
     exploredFrontiers = set([])
     s.push(start)
 
     while s.isEmpty() is False:
         Actions = list()
         firstNode = s.pop()
-        
+        print (firstNode)
         if (problem.isGoalState(firstNode[0])):
+            print ('ey')
             return firstNode[1]
         
         if firstNode[0] not in exploredFrontiers:
@@ -37,6 +37,8 @@ def breadthFirstSearch(problem):
                 Actions.append(potentialWinners[i][1])
                 #print(Nodes)
                 s.push((Nodes, Actions))
+                
+    return 'oops'
     
 
 def nullHeuristic(state, problem=None):

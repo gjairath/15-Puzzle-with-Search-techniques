@@ -30,6 +30,61 @@ class PuzzleState():
             cells.append(subList)
         return blank, cells
     
+    def result(self, move):
+        """
+          Returns a new eightPuzzle with the current state and blankLocation
+        updated based on the provided move.
+
+        The move should be a string drawn from a list returned by legalMoves.
+        Illegal moves will raise an exception, which may be an array bounds
+        exception.
+
+        NOTE: This function *does not* change the current object.  Instead,
+        it returns a new object.
+        """
+        row, col = self.blank
+        if(move == 'up'):
+            newrow = row - 1
+            newcol = col
+        elif(move == 'down'):
+            newrow = row + 1
+            newcol = col
+        elif(move == 'left'):
+            newrow = row
+            newcol = col - 1
+        elif(move == 'right'):
+            newrow = row
+            newcol = col + 1
+        else:
+            raise RuntimeError("Illegal Move")
+
+        # Create a copy of the current eightPuzzle
+        newPuzzle = PuzzleState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        newPuzzle.Cells = [values[:] for values in self.Cells]
+        # And update it to reflect the move
+        newPuzzle.Cells[row][col] = self.Cells[newrow][newcol]
+        newPuzzle.Cells[newrow][newcol] = self.Cells[row][col]
+        newPuzzle.blankLocation = newrow, newcol
+
+        return newPuzzle
+    
+    def printar(self):
+        """
+          Returns a display string for the maze
+        """
+        lines = []
+        horizontalLine = ('-' * (13))
+        lines.append(horizontalLine)
+        for row in self.Cells:
+            rowLine = '|'
+            for col in row:
+                if col == 0:
+                    col = ' '
+                rowLine = rowLine + ' ' + col.__str__() + ' |'
+            lines.append(rowLine)
+            lines.append(horizontalLine)
+        return '\n'.join(lines)
+    
     def potentialActions(self, Cells):
         
         # Takes: Cells, the matrix that has the values.
@@ -50,24 +105,26 @@ class PuzzleState():
                                  (0,1) up is illegal
         '''
         actions = []
-        for row, cols in Cells:
-            if row != 0:
+        row, cols = self.blank
+        if row != 0:
                 actions.append('up')
-            if row != 3:
+        if row != 3:
                 actions.append('down')
             
-            if cols != 0:
+        if cols != 0:
                 actions.append('left')
-            if cols != 3:
+        if cols != 3:
                 actions.append('right')
         return actions
         
     
     def isGoalState(self, puzzle):
-        for rows in range(4):
-            for cols in range(4):
-                if puzzle[rows][cols] != rows + cols:
+        current = 0
+        for row in range(4):
+            for col in range(4):
+                if current != self.Cells[row][col]:
                     return False
+                current += 1
         return True
     
     def debugPrinter(self):
@@ -75,13 +132,13 @@ class PuzzleState():
         print (self.blank)
         
 
-class SearchStuff(PuzzleState):
+class SearchStuff:
     
-    def __init__(self):
-        self.puzzle = self.Cells
-        self.expandedNodes = 0 #Just for curiousty
+    def __init__(self, puzzle):
+        self.puzzle = puzzle
+        self.expanded = 0 #Just for curiousty
         
-    def startingState(self):
+    def getStartState(self):
         return self.puzzle
     
     def getSubLists(self, puzzle):
@@ -89,13 +146,14 @@ class SearchStuff(PuzzleState):
         subLists = []
         actions = puzzle.potentialActions(puzzle)
         for action in actions:
-            subLists.append((puzzle, action, 1))
+            subLists.append((puzzle.result(action), action, 1))
+
             self.expanded += 1
         print("\n Nodes expanded: ".format(self.expanded))
         return subLists
     
-    def isGoal(self, puzzle):
-        return puzzle.isGoalState
+    def isGoalState(self, puzzle):
+        return puzzle.isGoalState(puzzle)
     
     
 
@@ -103,7 +161,12 @@ if __name__ == '__main__':
     
     numberArray = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     puzzleProblem = PuzzleState(numberArray)
+    print (puzzleProblem.printar())
+    # The puzzle object interactes with the BFS algorithm with the class above.
     search = SearchStuff(puzzleProblem)
+    
+    # The search object is what we actually do the BFS on.
     paths = search_utility.bfs(search)
-    
-    
+        
+    #print(paths)
+  
