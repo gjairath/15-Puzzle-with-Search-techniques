@@ -10,6 +10,7 @@ Utility file for various search algorithms
 
 import containers_utility as C
 import time
+import random
 
 def breadthFirstSearch(problem):
     

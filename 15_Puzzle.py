@@ -188,9 +188,9 @@ if __name__ == '__main__':
     
     numberArray = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     numberArray2 = [4,5,6,1,2,3,7,8,9,10,11,12,13,14,15,0]
-    puzzle = [1,2,3,6,5,4,7,8,9,10,11,12,13,14,15,0]
+    puzzle2 = [1,2,3,6,5,4,7,8,9,10,11,12,13,14,15,0]
 
-    puzzleProblem = PuzzleState(numberArray2)
+    puzzleProblem = PuzzleState(numberArray)
     print ('\n\nInitial Puzzle\n', puzzleProblem.printar())
     # The puzzle object interactes with the BFS algorithm with the class above.
     search = SearchStuff(puzzleProblem)
@@ -201,6 +201,15 @@ if __name__ == '__main__':
         puzzle, paths = search_utility.astar(search)
     print('\nNodes Expanded:', search.expanded)
     print('\n\nSolution:')
-    print (puzzle.printar())
     
+    curr = puzzle
+    print(paths)
+    if (len(paths) < 10):
+        print ('\n\n\nShowing solution, if path exceeds 10 moves, this is bypassed.')
+        for a in paths:
+            curr = puzzle.result(a)
+            print (curr.printar())
+    
+    print (puzzle.printar())
+
     print ('\nTime Taken in seconds:', time.time() - start)
