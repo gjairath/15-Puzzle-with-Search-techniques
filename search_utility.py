@@ -22,10 +22,9 @@ def breadthFirstSearch(problem):
     while s.isEmpty() is False:
         Actions = list()
         firstNode = s.pop()
-        print (firstNode)
         if (problem.isGoalState(firstNode[0])):
-            print ('ey')
-            return firstNode[1]
+            print ('\n Solution Found\n')
+            return firstNode[0], firstNode[1]
         
         if firstNode[0] not in exploredFrontiers:
             exploredFrontiers.add(firstNode[0])
@@ -38,7 +37,7 @@ def breadthFirstSearch(problem):
                 #print(Nodes)
                 s.push((Nodes, Actions))
                 
-    return 'oops'
+    return 'Failure'
     
 
 def nullHeuristic(state, problem=None):

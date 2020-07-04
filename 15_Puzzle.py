@@ -59,8 +59,11 @@ class PuzzleState():
             raise RuntimeError("Illegal Move")
 
         # Create a copy of the current eightPuzzle
-        newPuzzle = PuzzleState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        newPuzzle.Cells = [values[:] for values in self.Cells]
+        flat_list = [item for sublist in self.Cells for item in sublist]
+    
+
+
+        newPuzzle = PuzzleState(flat_list)
         # And update it to reflect the move
         newPuzzle.Cells[row][col] = self.Cells[newrow][newcol]
         newPuzzle.Cells[newrow][newcol] = self.Cells[row][col]
@@ -128,8 +131,7 @@ class PuzzleState():
         return True
     
     def debugPrinter(self):
-        print (self.Cells)
-        print (self.blank)
+        print ('new Cells', self.Cells)
         
 
 class SearchStuff:
@@ -147,9 +149,7 @@ class SearchStuff:
         actions = puzzle.potentialActions(puzzle)
         for action in actions:
             subLists.append((puzzle.result(action), action, 1))
-
             self.expanded += 1
-        print("\n Nodes expanded: ".format(self.expanded))
         return subLists
     
     def isGoalState(self, puzzle):
@@ -166,7 +166,7 @@ if __name__ == '__main__':
     search = SearchStuff(puzzleProblem)
     
     # The search object is what we actually do the BFS on.
-    paths = search_utility.bfs(search)
-        
-    #print(paths)
-  
+    puzzle, paths = search_utility.bfs(search)
+    print('Nodes Expanded:', search.expanded)
+ 
+    print (puzzle.printar())
