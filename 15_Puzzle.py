@@ -8,6 +8,9 @@ Created on Thu Jul  2 22:03:35 2020
 import search_utility
 import sys
 import time 
+import argparse
+
+
 
 class PuzzleState():
     
@@ -182,15 +185,33 @@ def progressbar(progressVal, prefix=" ", size=60, file=sys.stdout):
 
 if __name__ == '__main__':
     
+
     start = time.time()
     print ('\n\nKeep in mind 15 puzzle is NP hard')
     print ('A* is heavy on memory as well.')
     
-    numberArray = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    numberArray2 = [4,5,6,1,2,3,7,8,9,10,11,12,13,14,15,0]
-    puzzle2 = [1,2,3,6,5,4,7,8,9,10,11,12,13,14,15,0]
+    # ---------------------- 
+    msg = 'Type --help or -h for arguments'
+    parser = argparse.ArgumentParser(msg)
+    
+    parser.add_argument("-i", "--Input", help = "Enter Input", action = "store_true")
+    parser.add_argument("-d", "--Display", help = "Bypass 10 step display", action = "store_true")
+    
 
-    puzzleProblem = PuzzleState(numberArray)
+    args = parser.parse_args()
+    
+
+    desiredArray = [4,5,6,1,2,3,7,8,9,10,11,12,13,14,15,0]
+    
+    if args.Input:
+        desiredArray = []
+        for i in range(16):
+            someValues = input('Enter the values going horizontally for 4 rows: ')
+            desiredArray.append(int(someValues))
+    
+    # ----------------------
+
+    puzzleProblem = PuzzleState(desiredArray)
     print ('\n\nInitial Puzzle\n', puzzleProblem.printar())
     # The puzzle object interactes with the BFS algorithm with the class above.
     search = SearchStuff(puzzleProblem)
@@ -204,7 +225,12 @@ if __name__ == '__main__':
     
     curr = puzzle
     print(paths)
-    if (len(paths) < 10):
+    
+    bypassOn = False
+    if (len(paths) >= 10): bypassOn = False
+    if args.Display: bypassOn = True
+    
+    if (bypassOn):
         print ('\n\n\nShowing solution, if path exceeds 10 moves, this is bypassed.')
         for a in paths:
             curr = puzzle.result(a)
@@ -213,3 +239,4 @@ if __name__ == '__main__':
     print (puzzle.printar())
 
     print ('\nTime Taken in seconds:', time.time() - start)
+    print ('\nEnter -d or --Display to override the >=10 path solution bypass.')
