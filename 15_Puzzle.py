@@ -35,17 +35,7 @@ class PuzzleState():
         return blank, cells
     
     def result(self, move):
-        """
-          Returns a new eightPuzzle with the current state and blankLocation
-        updated based on the provided move.
-
-        The move should be a string drawn from a list returned by legalMoves.
-        Illegal moves will raise an exception, which may be an array bounds
-        exception.
-
-        NOTE: This function *does not* change the current object.  Instead,
-        it returns a new object.
-        """
+  
         row, col = self.blank
         if(move == 'up'):
             newrow = row - 1

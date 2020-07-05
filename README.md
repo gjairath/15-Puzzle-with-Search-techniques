@@ -6,4 +6,5 @@ Usage:
 
 python 15_Puzzle.py 
 
-*The puzzles are hardcoded in an array
+Type --help for more commands
+use -i for input
